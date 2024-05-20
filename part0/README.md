@@ -24,7 +24,7 @@ sequenceDiagram
 
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
     activate server
-    server-->>browser: [{ "content": "HTML is easy", "date": "2023-1-1" }, ... ]
+    server-->>browser: [{ "content": "HTML is easy", "date": "2024-5-20" }, ... ]
     deactivate server
 
     Note right of browser: The browser executes the callback function that renders the notes
@@ -41,7 +41,7 @@ sequenceDiagram
     browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
     activate server
     Note left of server: The server saves the new note to the database
-    server-->>browser: { "content": "New note content", "date": "2023-1-2" }
+    server-->>browser: { "content": "Another note", "date": "2024-5-20" }
     deactivate server
 
     Note right of browser: The browser updates the view to include the new note
