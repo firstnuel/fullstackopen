@@ -1,3 +1,5 @@
+0.5: Single page app diagram
+
 ```mermaid
 sequenceDiagram
     participant browser
@@ -27,3 +29,20 @@ sequenceDiagram
 
     Note right of browser: The browser executes the callback function that renders the notes
 ````
+
+0.6: New note in Single page app diagram
+```mermaid
+sequenceDiagram
+    participant browser
+    participant server
+
+    Note right of browser: The user writes a new note and clicks the save button
+
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+    activate server
+    Note left of server: The server saves the new note to the database
+    server-->>browser: { "content": "New note content", "date": "2023-1-2" }
+    deactivate server
+
+    Note right of browser: The browser updates the view to include the new note
+```
