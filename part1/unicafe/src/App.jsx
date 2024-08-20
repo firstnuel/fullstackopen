@@ -21,7 +21,7 @@ const StatisticLine = ({text, value, symbol=null}) => {
 
 const Statistics = ({good, neutral, bad}) => {
   let all = good + neutral + bad;
-  let average = ((good * 1)  + (neutral * 0) + (bad * -1)) / (good + neutral + bad);
+  let average = ((good * 1)  + (neutral * 0) + (bad * -1)) / all;
 
 return (
   <>
