@@ -40,7 +40,7 @@ const App = () => {
       number: newNumber,
       id: String(persons.length + 1)
     }
-    const personExists = persons.some(person => person.name.trim() === newContact.name.trim())
+    const personExists = persons.some(person => person.name.trim() === newContact.name)
     if (personExists){
        if (window.confirm(`${newContact.name} is already added to phonebook, replace the old number`)) {
         let person = persons.find(person => person.name === newContact.name)
@@ -77,11 +77,12 @@ const App = () => {
       phonebook
         .deleteContact(id)
         .then(() => {
+          notify(`Deleted ${person.name}`, true)
           setPersons(persons.filter(person => person.id !== id))
         })
         .catch(error => {
           console.error('Delete failed', error)
-          alert(`Failed to delete ${person.name}.`)
+          notify(`Failed to delete ${person.name}.`, false)
         })
     }
   }
