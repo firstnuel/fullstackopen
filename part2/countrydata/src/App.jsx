@@ -17,8 +17,6 @@ const App = () => {
         .getCountryData(value)
         .then(filteredData => setCountries(filteredData))
         .catch(error => console.error(error));
-    } else {
-      setCountries([]);
     }
   }, [value])
 
