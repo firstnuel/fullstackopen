@@ -3,7 +3,6 @@ const morgan = require('morgan')
 const app = express()
 const cors = require('cors')
 
-
 let persons = [
     { 
       "id": "1",
@@ -27,6 +26,7 @@ let persons = [
     }
 ]
 
+app.use(express.static('dist'))
 app.use(cors())
 app.use(express.json())
 app.use(morgan(function (tokens, req, res) {
@@ -97,7 +97,6 @@ app.post('/api/persons/', (req, res) => {
     res.json(newPerson)
     
 })
-
 
 const PORT =  process.env.PORT || 3001
 app.listen(PORT, () => {
