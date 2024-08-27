@@ -38,7 +38,7 @@ const App = () => {
     let newContact = {
       name: newName.trim(), 
       number: newNumber,
-      id: String(persons.length + 1)
+      // id: String(persons.length + 1)
     }
     const personExists = persons.some(person => person.name.trim() === newContact.name)
     if (personExists){
