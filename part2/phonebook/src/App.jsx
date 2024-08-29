@@ -65,8 +65,8 @@ const App = () => {
             notify(`Added ${newContact.name}`, true)
           })
           .catch(error => {
-            console.error('Create contact failed', error)
-            notify('Failed to create', false)
+            const errMsg = error.response.data.error
+            notify(errMsg , false)
           })
     }
   }
@@ -86,6 +86,7 @@ const App = () => {
         })
     }
   }
+
 
   const filteredPersons = persons.filter((person) => {
     let len = search.length;
