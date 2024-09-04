@@ -225,7 +225,7 @@ test('creation succeeds with a fresh username', async () => {
       .send(newUser)
       .expect(400)
       .expect('Content-Type', /application\/json/)
-
+s
     const usersAtEnd = await helper.usersInDb()
 
     assert(result.body.error.includes('expected `username` to be unique'))
