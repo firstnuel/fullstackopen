@@ -270,7 +270,7 @@ describe("invalid users are not created ", ()=> {
 })
 
 after(async () => {
-  // await User.deleteMany({})
-  // await Blog.deleteMany({})
+  await User.deleteMany({})
+  await Blog.deleteMany({})
   await mongoose.connection.close()
 })
