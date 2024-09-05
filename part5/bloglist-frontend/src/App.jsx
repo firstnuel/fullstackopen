@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import AllBlogs from './components/AllBlogs'
 import blogService from './services/blogs'
 import loginService from './services/loginService'
@@ -7,20 +7,8 @@ import LoginForm from './components/LoginForm'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [blogTitle, setBlogTitle] = useState('')
-  const [blogAuthor, setBlogAuthor] = useState('')
-  const [blogUrl, setBlogUrl] = useState('')
   const [status, setStatus] = useState({message: "", success: false})
-
-  const clear = () => {
-    setUsername('')
-    setPassword('')
-    setBlogTitle('')
-    setBlogAuthor('')
-    setBlogUrl('')
-  }
+  const blogFormRef = useRef()
 
   const notify = (msg, stats) => {
     setStatus({message: msg, success: stats})
@@ -42,24 +30,16 @@ const App = () => {
       .then(blogs => setBlogs(blogs));
     }
   }, [user]);
-  
-  const handleName = event => setUsername(event.target.value)
-  const handlePassword = event => setPassword(event.target.value)
-  const handleBlogTitle = event => setBlogTitle(event.target.value)
-  const handleBlogAuthor = event => setBlogAuthor(event.target.value)
-  const handleBlogUrl = event => setBlogUrl(event.target.value)
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
+  const handleLogin = async (loginDetails) => {
     try{
-      const user = await loginService.login({username, password,})
+      const user = await loginService.login(loginDetails)
 
       window.localStorage.setItem(
         'loggedBlogAppUser', JSON.stringify(user)
       ) 
       blogService.setToken(user.token)
       setUser(user)
-      clear()
     } catch(exception){
       const errMsg = 'wrong username or password'
       notify(errMsg , false)
@@ -72,17 +52,11 @@ const App = () => {
     setUser(null)
   }
 
-  const handleCreateNew = async event => {
-    event.preventDefault()
-    const newBlog = {
-      title : blogTitle,
-      author : blogAuthor,
-      url : blogUrl,
-    }
+  const handleCreateNew = async newBlog => {
     try{
       const createdBlog = await blogService.create(newBlog)
       setBlogs(blogs.concat(createdBlog))
-      clear()
+      blogFormRef.current.toggleVisibility()
       notify(`a new blog ${createdBlog.title} by ${createdBlog.author} added`, true)
     } catch(error) {
       const errMsg = error.response.data.error
@@ -90,26 +64,50 @@ const App = () => {
     }
   }
 
+  const handleAddLikes = async blogToUpdate => {
+    try{
+      const updatedBlog = await blogService.update(blogToUpdate.id, 
+        {...blogToUpdate,
+        likes: blogToUpdate.likes + 1
+      })
+      setBlogs(blogs.map(blog => blog.id === updatedBlog.id ? updatedBlog : blog))
+      notify(`likes updated`, true)
+      return (true)
+    } catch (error) {
+      const errMsg = 'could not update likes'
+      notify(errMsg , false)
+      return (false)
+    }
+  }
+
+  const handleDelete = async blogToDelete => {
+    if(window.confirm(`remove blog ${blogToDelete.title} by ${blogToDelete.author}`)){
+    try{
+      const deleteStatus = await blogService.deleteBlog(blogToDelete.id)
+      if (deleteStatus === 204){
+        setBlogs(blogs.filter(blog => blog.id !== blogToDelete.id))
+        notify(`Blog deleted`, true)
+      }
+    } catch (error) {
+      const errMsg = 'could not delete blog'
+      notify(errMsg , false)
+    }}
+  }
+
   return (
     <div>
-      {user ? <AllBlogs blogs = {blogs}
+      {user ?
+      <AllBlogs blogs = {blogs}
        user = {user}
        handleLogOut = {handleLogOut}
-       createNew = {handleCreateNew} 
-       blogTitle = {blogTitle} 
-       handleBlogTitle = {handleBlogTitle} 
-       blogAuthor = {blogAuthor}
-       handleBlogAuthor = {handleBlogAuthor} 
-       blogUrl = {blogUrl} 
-       handleBlogUrl = {handleBlogUrl}
+       handleCreateNew = {handleCreateNew} 
        message={status.message} 
        success={status.success}
+       blogFormRef={blogFormRef}
+       handleAddLikes={handleAddLikes}
+       handleDelete={handleDelete}
       /> :
       <LoginForm handleLogin = {handleLogin}
-       username = {username}
-       password = {password} 
-       handlePassword = {handlePassword}
-       handleName = {handleName}
        message={status.message} 
        success={status.success}
       />}
