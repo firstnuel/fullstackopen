@@ -7,12 +7,12 @@ import LoginForm from './components/LoginForm'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [status, setStatus] = useState({message: "", success: false})
+  const [status, setStatus] = useState({ message: '', success: false })
   const blogFormRef = useRef()
 
   const notify = (msg, stats) => {
-    setStatus({message: msg, success: stats})
-    setTimeout(() => setStatus({message: "", success: false}), 3000)
+    setStatus({ message: msg, success: stats })
+    setTimeout(() => setStatus({ message: '', success: false }), 3000)
   }
 
   useEffect(() => {
@@ -27,9 +27,9 @@ const App = () => {
   useEffect(() => {
     if (user) {
       blogService.getAll()
-      .then(blogs => setBlogs(blogs));
+        .then(blogs => setBlogs(blogs))
     }
-  }, [user]);
+  }, [user])
 
   const handleLogin = async (loginDetails) => {
     try{
@@ -37,13 +37,13 @@ const App = () => {
 
       window.localStorage.setItem(
         'loggedBlogAppUser', JSON.stringify(user)
-      ) 
+      )
       blogService.setToken(user.token)
       setUser(user)
     } catch(exception){
       const errMsg = 'wrong username or password'
       notify(errMsg , false)
-        console.error(exception)
+      console.error(exception)
     }
   }
 
@@ -66,12 +66,12 @@ const App = () => {
 
   const handleAddLikes = async blogToUpdate => {
     try{
-      const updatedBlog = await blogService.update(blogToUpdate.id, 
-        {...blogToUpdate,
-        likes: blogToUpdate.likes + 1
-      })
+      const updatedBlog = await blogService.update(blogToUpdate.id,
+        { ...blogToUpdate,
+          likes: blogToUpdate.likes + 1
+        })
       setBlogs(blogs.map(blog => blog.id === updatedBlog.id ? updatedBlog : blog))
-      notify(`likes updated`, true)
+      notify('likes updated', true)
       return (true)
     } catch (error) {
       const errMsg = 'could not update likes'
@@ -82,35 +82,35 @@ const App = () => {
 
   const handleDelete = async blogToDelete => {
     if(window.confirm(`remove blog ${blogToDelete.title} by ${blogToDelete.author}`)){
-    try{
-      const deleteStatus = await blogService.deleteBlog(blogToDelete.id)
-      if (deleteStatus === 204){
-        setBlogs(blogs.filter(blog => blog.id !== blogToDelete.id))
-        notify(`Blog deleted`, true)
-      }
-    } catch (error) {
-      const errMsg = 'could not delete blog'
-      notify(errMsg , false)
-    }}
+      try{
+        const deleteStatus = await blogService.deleteBlog(blogToDelete.id)
+        if (deleteStatus === 204){
+          setBlogs(blogs.filter(blog => blog.id !== blogToDelete.id))
+          notify('Blog deleted', true)
+        }
+      } catch (error) {
+        const errMsg = 'could not delete blog'
+        notify(errMsg , false)
+      }}
   }
 
   return (
     <div>
       {user ?
-      <AllBlogs blogs = {blogs}
-       user = {user}
-       handleLogOut = {handleLogOut}
-       handleCreateNew = {handleCreateNew} 
-       message={status.message} 
-       success={status.success}
-       blogFormRef={blogFormRef}
-       handleAddLikes={handleAddLikes}
-       handleDelete={handleDelete}
-      /> :
-      <LoginForm handleLogin = {handleLogin}
-       message={status.message} 
-       success={status.success}
-      />}
+        <AllBlogs blogs = {blogs}
+          user = {user}
+          handleLogOut = {handleLogOut}
+          handleCreateNew = {handleCreateNew}
+          message={status.message}
+          success={status.success}
+          blogFormRef={blogFormRef}
+          handleAddLikes={handleAddLikes}
+          handleDelete={handleDelete}
+        /> :
+        <LoginForm handleLogin = {handleLogin}
+          message={status.message}
+          success={status.success}
+        />}
     </div>
   )
 }
