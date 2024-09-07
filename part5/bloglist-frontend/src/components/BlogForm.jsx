@@ -37,6 +37,7 @@ const BlogForm = ({ handleCreateNew }) => {
             value={blogTitle}
             type="text"
             onChange={handleBlogTitle}
+            aria-label="title"
             name="title"
             required>
           </input>
@@ -48,6 +49,7 @@ const BlogForm = ({ handleCreateNew }) => {
             type="text"
             onChange={handleBlogAuthor}
             name="author"
+            aria-label="author"
             required>
           </input>
         </div>
@@ -57,6 +59,7 @@ const BlogForm = ({ handleCreateNew }) => {
             value={blogUrl}
             type="text"
             onChange={handleBlogUrl}
+            aria-label="url"
             name="url"
             required>
           </input>

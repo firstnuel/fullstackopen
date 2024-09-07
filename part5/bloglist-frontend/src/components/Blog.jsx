@@ -19,19 +19,18 @@ const Blog = ({ blog, user,  handleAddLikes, handleDelete }) => {
 
   return (
 
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog'>
       <div>
         {blog.title} {blog.author} <button onClick={handleView}>
           {view? 'hide' : 'show'}</button>
       </div>
       {view && <div>
         <div>{blog.url}</div>
-        <div>likes {likes}  <button onClick={addLike}>
-        like</button></div>
+        <div>likes {likes}  <button onClick={addLike}>like</button></div>
         <div>{blog.author}</div>
-        {blog.user !== user.id? <div><button style={{ backgroundColor:'red' }}
+        {blog.user === user.id && <div><button style={{ backgroundColor:'red' }}
           onClick={deleteBlog}
-        >remove</button></div> : null}
+        >remove</button></div>}
       </div>}
     </div>
   )}
