@@ -33,6 +33,7 @@ const LoginForm = ({ handleLogin, message, success }) => {
             type="text"
             value={username}
             name="Username"
+            aria-label="Username"
             onChange={handleName}
             autoComplete="username"
             required
@@ -43,6 +44,7 @@ const LoginForm = ({ handleLogin, message, success }) => {
             type="password"
             value={password}
             name="Password"
+            aria-label="Password"
             onChange={handlePassword}
             autoComplete="current-password"
             required
