@@ -14,7 +14,6 @@ const notificationSlice = createSlice({
     }
 })
 
-
 export const setNotification = (content, time) => {
     return (dispatch) => {
         dispatch(notify(content))
