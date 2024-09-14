@@ -8,7 +8,6 @@ const App = () => {
 
   const queryClient = useQueryClient()
 
-
   const updateAnecdoteMutation = useMutation({
     mutationFn: anecdoteService.update,
     onSuccess: () => {
@@ -19,7 +18,6 @@ const App = () => {
     const updatedAnecdote = { ...anecdote, votes: anecdote.votes + 1 }
     updateAnecdoteMutation.mutate(updatedAnecdote)
   }
-
 
   const result  = useQuery({
     queryKey: ['anecdotes'],
