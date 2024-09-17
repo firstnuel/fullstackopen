@@ -1,27 +1,26 @@
-import Notification from './Notification'
-import { useState } from 'react'
-import { logInUser } from '../reducers/userReducer'
-import { useDispatch } from 'react-redux'
+import Notification from "./Notification";
+import { useState } from "react";
+import { logInUser } from "../reducers/userReducer";
+import { useDispatch } from "react-redux";
 
 const LoginForm = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-
-  const handleName = event => setUsername(event.target.value)
-  const handlePassword = event => setPassword(event.target.value)
+  const handleName = (event) => setUsername(event.target.value);
+  const handlePassword = (event) => setPassword(event.target.value);
   const clear = () => {
-    setUsername('')
-    setPassword('')
-  }
+    setUsername("");
+    setPassword("");
+  };
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const handleLogin = event => {
-    event.preventDefault()
-    dispatch(logInUser({ username, password, }))
-    clear()
-  }
+  const handleLogin = (event) => {
+    event.preventDefault();
+    dispatch(logInUser({ username, password }));
+    clear();
+  };
 
   return (
     <>
@@ -29,7 +28,8 @@ const LoginForm = () => {
       <Notification />
       <form onSubmit={handleLogin}>
         <div>
-        username <input
+          username{" "}
+          <input
             type="text"
             value={username}
             name="Username"
@@ -40,7 +40,8 @@ const LoginForm = () => {
           />
         </div>
         <div>
-        password <input
+          password{" "}
+          <input
             type="password"
             value={password}
             name="Password"
@@ -53,8 +54,7 @@ const LoginForm = () => {
         <button type="submit">login</button>
       </form>
     </>
-  )}
+  );
+};
 
-
-
-export default LoginForm
+export default LoginForm;

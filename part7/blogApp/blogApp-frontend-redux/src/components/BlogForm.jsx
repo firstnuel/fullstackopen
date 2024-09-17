@@ -1,43 +1,42 @@
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { createNew } from '../reducers/blogsReducer'
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { createNew } from "../reducers/blogsReducer";
 
 const BlogForm = ({ ref }) => {
-
-  const [blogTitle, setBlogTitle] = useState('')
-  const [blogAuthor, setBlogAuthor] = useState('')
-  const [blogUrl, setBlogUrl] = useState('')
+  const [blogTitle, setBlogTitle] = useState("");
+  const [blogAuthor, setBlogAuthor] = useState("");
+  const [blogUrl, setBlogUrl] = useState("");
 
   const clear = () => {
-    setBlogTitle('')
-    setBlogAuthor('')
-    setBlogUrl('')
-  }
+    setBlogTitle("");
+    setBlogAuthor("");
+    setBlogUrl("");
+  };
 
-  const handleBlogTitle = event => setBlogTitle(event.target.value)
-  const handleBlogAuthor = event => setBlogAuthor(event.target.value)
-  const handleBlogUrl = event => setBlogUrl(event.target.value)
+  const handleBlogTitle = (event) => setBlogTitle(event.target.value);
+  const handleBlogAuthor = (event) => setBlogAuthor(event.target.value);
+  const handleBlogUrl = (event) => setBlogUrl(event.target.value);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const handleCreateNew = async event => {
-    event.preventDefault()
+  const handleCreateNew = async (event) => {
+    event.preventDefault();
     const newBlog = {
-      title : blogTitle,
-      author : blogAuthor,
-      url : blogUrl,
-    }
-    dispatch(createNew(newBlog))
-    ref.current.toggleVisibility()
-    clear()
-  }
+      title: blogTitle,
+      author: blogAuthor,
+      url: blogUrl,
+    };
+    dispatch(createNew(newBlog));
+    ref.current.toggleVisibility();
+    clear();
+  };
 
   return (
     <>
       <h2>create new</h2>
       <form onSubmit={handleCreateNew}>
         <div>
-            title:
+          title:
           <input
             value={blogTitle}
             type="text"
@@ -45,11 +44,11 @@ const BlogForm = ({ ref }) => {
             aria-label="title"
             name="title"
             data-testid="title"
-            required>
-          </input>
+            required
+          ></input>
         </div>
         <div>
-            author:
+          author:
           <input
             value={blogAuthor}
             type="text"
@@ -57,11 +56,11 @@ const BlogForm = ({ ref }) => {
             name="author"
             aria-label="author"
             data-testid="author"
-            required>
-          </input>
+            required
+          ></input>
         </div>
         <div>
-            url:
+          url:
           <input
             value={blogUrl}
             type="text"
@@ -69,16 +68,16 @@ const BlogForm = ({ ref }) => {
             aria-label="url"
             data-testid="url"
             name="url"
-            required>
-          </input>
+            required
+          ></input>
         </div>
         <button type="create">create</button>
       </form>
     </>
-  )}
-
+  );
+};
 
 // BlogForm.propTypes = {
 //   handleCreateNew: PropTypes.func.isRequired,
 // }
-export default BlogForm
+export default BlogForm;
