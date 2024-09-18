@@ -47,32 +47,29 @@ blogsRouter.delete('/:id', async (request , response) => {
 
 blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
-  const user = request.user
+  // const user = request.user
 
   const blog = await Blog.findById(request.params.id)
   if (!blog) {
     return response.status(404).json({ error: 'Blog not found' })
   }
-  if(!blog.user) {
-    return response.status(401).json({ error: 'Unauthorized: unknown user' })
-
-  }
-  if (blog.user.toString() !== user.id.toString()) {
-    return response.status(401).json({ error: 'Unauthorized: You can only update your own blogs' })
-  }
   if (!body.title || !body.url) {
     return response.status(400).json({ error: 'Title and URL are required' })
   }
+  // if (blog.user.toString() !== user.id.toString()) {
+  //   return response.status(403).json({ error: 'You are not authorized to update this blog' })
+  // }
 
   const updatedBlogData = {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes || 0
+    likes: body.likes || 0,
+    comments : body.comments || blog.comments 
   }
 
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, updatedBlogData, { new: true })
-  response.json(updatedBlog)
+  return response.status(200).json(updatedBlog)
 })
 
 module.exports = blogsRouter
