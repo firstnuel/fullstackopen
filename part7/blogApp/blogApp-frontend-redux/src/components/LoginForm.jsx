@@ -1,60 +1,41 @@
-import Notification from "./Notification";
-import { useState } from "react";
-import { logInUser } from "../reducers/userReducer";
-import { useDispatch } from "react-redux";
+import Notification from './Notification'
+import { logInUser } from '../reducers/userReducer'
+import { useDispatch } from 'react-redux'
+import { useField } from '../hooks'
 
 const LoginForm = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const { reset: usernameReset, ...username } = useField('username')
+  const { reset: passwordReset, ...password } = useField('password')
 
-  const handleName = (event) => setUsername(event.target.value);
-  const handlePassword = (event) => setPassword(event.target.value);
-  const clear = () => {
-    setUsername("");
-    setPassword("");
-  };
-
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const handleLogin = (event) => {
-    event.preventDefault();
-    dispatch(logInUser({ username, password }));
-    clear();
-  };
+    event.preventDefault()
+    dispatch(logInUser({ username: username.value, password: password.value }))
+    usernameReset()
+    passwordReset()
+  }
 
   return (
-    <>
+    <div className='login form'>
       <h2>log into application</h2>
       <Notification />
       <form onSubmit={handleLogin}>
         <div>
-          username{" "}
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            aria-label="Username"
-            onChange={handleName}
-            autoComplete="username"
-            required
-          />
+          username
+          <input {...username}
+            autoComplete="username" />
         </div>
         <div>
-          password{" "}
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            aria-label="Password"
-            onChange={handlePassword}
+          password
+          <input {...password}
             autoComplete="current-password"
-            required
-          />
+            type="password" />
         </div>
         <button type="submit">login</button>
       </form>
-    </>
-  );
-};
+    </div>
+  )
+}
 
-export default LoginForm;
+export default LoginForm
