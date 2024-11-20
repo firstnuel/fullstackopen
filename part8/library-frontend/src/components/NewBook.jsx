@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useMutation } from "@apollo/client"
-import { ADD_BOOK, ALL_AUTHORS, ALL_BOOKS } from '../queries'
-import { updateCache } from '../../updatecache'
-
+import { ADD_BOOK } from '../queries'
+import { updateCacheWith } from '../../updatecache'
 
 // eslint-disable-next-line react/prop-types
 const NewBook = ({ show }) => {
@@ -13,15 +12,9 @@ const NewBook = ({ show }) => {
   const [genres, setGenres] = useState([])
 
   const [ addBook ]  = useMutation(ADD_BOOK, {
-    update(cache, { data }) {
-      const newBook = data?.addBook
-      if (newBook) {
-        const queries = [
-          { query: ALL_AUTHORS, queryName: 'allAuthors' },
-          { query: ALL_BOOKS, queryName: 'allBooks' }
-        ]
-        updateCache(cache, queries, newBook)
-      }
+    update: (cache, response) => {
+      const addedBook = response.data.addBook
+      updateCacheWith(addedBook, cache)
     },
   })
 
