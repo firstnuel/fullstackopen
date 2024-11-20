@@ -4,8 +4,7 @@ import { ALL_AUTHORS, EDIT_AUTHOR } from "../queries"
 import Select from 'react-select'
 import { useState } from "react"
 
-// eslint-disable-next-line react/prop-types
-const Authors = ({ show }) => {
+const Authors = ({ show, token }) => {
   const result = useQuery(ALL_AUTHORS)
 
   if (!show) {
@@ -37,14 +36,13 @@ const Authors = ({ show }) => {
           ))}
         </tbody>
       </table>
-      <SetBirthYear authors={authors}/>
+      {token && <SetBirthYear authors={authors}/>}
     </div>
   )
 }
 
 export default Authors
 
-// eslint-disable-next-line react/prop-types
 const SetBirthYear = ({ authors }) => {
   const [authorName, setAuthorName] = useState(null)
   const [born, setBorn] = useState('')
@@ -62,9 +60,8 @@ const SetBirthYear = ({ authors }) => {
 
     editAuthor({ variables: { name: authorName.value, setBornTo: parseInt(born) } })
 
-    setAuthorName(null)
     setBorn('')
-    
+    setAuthorName(null)
   }
 
   return(

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useMutation } from "@apollo/client"
 import { ADD_BOOK, ALL_AUTHORS, ALL_BOOKS } from '../queries'
+import { updateCache } from '../../updatecache'
 
 
 // eslint-disable-next-line react/prop-types
@@ -11,15 +12,22 @@ const NewBook = ({ show }) => {
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
 
-
-  const [ addBook ]  = useMutation(ADD_BOOK,
-     { refetchQueries: [ { query: ALL_AUTHORS }, { query: ALL_BOOKS } ] }
-  )
+  const [ addBook ]  = useMutation(ADD_BOOK, {
+    update(cache, { data }) {
+      const newBook = data?.addBook
+      if (newBook) {
+        const queries = [
+          { query: ALL_AUTHORS, queryName: 'allAuthors' },
+          { query: ALL_BOOKS, queryName: 'allBooks' }
+        ]
+        updateCache(cache, queries, newBook)
+      }
+    },
+  })
 
   if (!show) {
     return null
   }
-
 
   const submit = async (event) => {
     event.preventDefault()
@@ -40,6 +48,7 @@ const NewBook = ({ show }) => {
 
   return (
     <div>
+      <h2>Create new book</h2>
       <form onSubmit={submit}>
         <div>
           title
