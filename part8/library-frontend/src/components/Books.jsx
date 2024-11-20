@@ -8,7 +8,7 @@ const Books = ({ show }) => {
 
   const { loading, data } = useQuery(ALL_BOOKS, {
     variables: { genre: filter, author: null },
-  });
+  })
 
   if (!show) {
     return null;
@@ -17,7 +17,6 @@ const Books = ({ show }) => {
   if (loading) {
     return <div>loading...</div>
   }
-
 
   const books = data.allBooks
   const genres = [];
