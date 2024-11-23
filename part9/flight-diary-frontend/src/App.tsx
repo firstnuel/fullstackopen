@@ -26,11 +26,11 @@ const App = () =>  {
 
   return (
     <>
-      {error && <div>{}</div>}
+      {error && <div>{error}</div>}
       <EntryForm entries={entries} setEntries={setEntries}/>
       <Entries entries={entries} />
     </>
-  )
-}
+  );
+};
 
 export default App
