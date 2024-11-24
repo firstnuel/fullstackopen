@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { Request, Response, NextFunction } from 'express';
-import { NewPtDataSchema } from './utils';
+import { NewPtDataSchema, NewEntrySchema } from './utils';
 
 export const errorMiddleware = (error: unknown, _req: Request, res: Response, next: NextFunction) => { 
     if (error instanceof z.ZodError) {
@@ -12,10 +12,22 @@ export const errorMiddleware = (error: unknown, _req: Request, res: Response, ne
 
 export const NewPtDataParser = (req: Request, _res: Response, next: NextFunction) => { 
     try {
-        NewPtDataSchema.parse(req.body);
-        console.log(req.body);
+      const body = req.body as { entries?: unknown[] };
+      if (!body.entries) body.entries = [];
+        NewPtDataSchema.parse(body);
+        console.log(body);
         next();
     } catch (error: unknown) {
         next(error);
     }
   };
+
+export const NewEntryParser = (req: Request, _res: Response, next: NextFunction) => {
+  try {
+    NewEntrySchema.parse(req.body);
+    console.log(req.body);
+    next();
+  } catch (error: unknown) {
+    next(error);
+  };
+};
