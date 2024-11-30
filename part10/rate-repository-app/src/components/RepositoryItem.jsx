@@ -4,18 +4,30 @@ import Text from './Text';
 
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-    },
     avatar: {
-      width: 50,
-      height: 50,
       borderRadius: 3,
+      height: 50,
+      width: 50,
     },
-    logo: {
-      width: 66,
-      height: 58,
-      flex: 0
+    langStyle: {
+        alignSelf: 'flex-start',
+        backgroundColor: theme.colors.primary,
+        borderRadius: 4,
+        color: '#FFFFFF',
+        fontSize: 15,
+        paddingHorizontal: 8,
+        paddingVertical: 4
+    },
+    ratingItems: {
+        alignItems: 'center',
+        gap: 10,
+    },
+    ratings: {
+        flex: 1,
+        flexDirection: 'row',
+        gap: 15,
+        justifyContent: 'space-around', 
+        margin: 12,
     },
     repoInfo: {
         flexDirection: 'row',
@@ -23,27 +35,7 @@ const styles = StyleSheet.create({
         margin: 12, 
     },
     textInfo: {
-        gap: 10,
         flex: 1,
-    },
-    langStyle: {
-        backgroundColor: theme.colors.primary,
-        alignSelf: 'flex-start',
-        paddingHorizontal: 8,
-        paddingVertical: 4,
-        borderRadius: 4,
-        color: 'white',
-        fontSize: 15
-    },
-    ratings: {
-        flex: 1,
-        flexDirection: 'row',
-        gap: 15,
-        margin: 12, 
-        justifyContent: 'space-around',
-    },
-    ratingItems: {
-        alignItems: 'center',
         gap: 10,
     },
   });
