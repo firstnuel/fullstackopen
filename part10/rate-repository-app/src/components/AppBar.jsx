@@ -32,8 +32,8 @@ const AppBar = () => {
 
   const {  data, loading, error  } = useQuery(GET_USER)
 
-  if (loading) return <Text>Loading...</Text>;  // Show a loading message or spinner
-  if (error) return <Text>Error: {error.message}</Text>; // Show error message
+  if (loading) return <Text>Loading...</Text>; 
+  if (error) return <Text>Error: {error.message}</Text>;
 
   const user = data.me
 
@@ -53,13 +53,21 @@ const AppBar = () => {
         <Link to="/">
           <Text fontSize='header' fontWeight='bold' color='header'>Repositories</Text>
         </Link>
+       {user &&  <Link to="/review">
+          <Text fontSize='header' fontWeight='bold' color='header'>Create a review</Text>
+        </Link>}
+       {user && <Link to="/myreviews">
+          <Text fontSize='header' fontWeight='bold' color='header'>My reviews</Text>
+        </Link>}
       { user ?        
-          <Text onPress={handleSignOut}  fontSize='header' fontWeight='bold' color='header'>Sign Out</Text>
+          <Text onPress={handleSignOut}  fontSize='header' fontWeight='bold' color='header'>Sign out</Text>
         : <Link to="/signin">
-          <Text fontSize='header' fontWeight='bold' color='header'>Sign In</Text>
+          <Text fontSize='header' fontWeight='bold' color='header'>Sign in</Text>
         </Link>
         }
-
+        <Link to="/signup">
+          <Text fontSize='header' fontWeight='bold' color='header'>Sign up</Text>
+        </Link>
 
       </ScrollView>
     </View>

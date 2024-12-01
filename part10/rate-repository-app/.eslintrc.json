@@ -8,13 +8,15 @@
     "extends": [
       "eslint:recommended",
       "plugin:react/recommended",
-      "plugin:react-native/all"
+      "plugin:react-native/all",
+      
     ],
     "parser": "@babel/eslint-parser",
     "parserOptions": {
-      "requireConfigFile": false,
+      "requireConfigFile": true,
       "ecmaFeatures": {
-        "jsx": true
+        "jsx": true,
+        "modules": true
       }
     },
 

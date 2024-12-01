@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import useSignIn from '../hooks/useSignIn';
 import { useNavigate } from 'react-router-native';
 
-// Validation schema for form inputs
+
 const validationSchema = yup.object().shape({
   username: yup
     .string()
@@ -16,36 +16,24 @@ const validationSchema = yup.object().shape({
     .required('Password is required'),
 });
 
-const SignIn = () => {
-  const [signIn] = useSignIn();
-  const navigate = useNavigate(); 
-
+export const SignInContainer = ({ onSubmit }) => {
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
     },
     validationSchema,
-    onSubmit: async (values) => {
-      const { username, password } = values;
-      try {
-        const data = await signIn({ username, password });
-        if (data) {
-          navigate('/'); 
-        }
-      } catch (error) {
-        console.error('Error signing in:', error);
-      }
-    },
+    onSubmit,
   });
 
   return (
     <View style={styles.container}>
       <TextInput
+        testID="usernameInput"
         placeholder="Username"
         value={formik.values.username}
         onChangeText={formik.handleChange('username')}
-        onBlur={formik.handleBlur('username')} // Ensure touched state is updated
+        onBlur={formik.handleBlur('username')}
         style={styles.input}
       />
       {formik.touched.username && formik.errors.username && (
@@ -53,10 +41,11 @@ const SignIn = () => {
       )}
 
       <TextInput
+        testID="passwordInput"
         placeholder="Password"
         value={formik.values.password}
         onChangeText={formik.handleChange('password')}
-        onBlur={formik.handleBlur('password')} // Ensure touched state is updated
+        onBlur={formik.handleBlur('password')}
         style={styles.input}
         secureTextEntry
       />
@@ -64,16 +53,40 @@ const SignIn = () => {
         <Text style={styles.errorText}>{formik.errors.password}</Text>
       )}
 
-      <Pressable onPress={formik.handleSubmit} style={styles.button}>
+      <Pressable 
+        testID="submitButton"
+        onPress={formik.handleSubmit} 
+        style={styles.button}
+      >
         <Text style={styles.buttonText}>Sign In</Text>
       </Pressable>
     </View>
   );
 };
 
+const SignIn = () => {
+  const [signIn] = useSignIn();
+  const navigate = useNavigate(); 
+
+  const handleSubmit = async (values) => {
+    const { username, password } = values;
+    
+    try {
+      const data = await signIn({ username, password });
+      if (data) {
+        navigate('/'); 
+      }
+    } catch (error) {
+      console.error('Error signing in:', error);
+    }
+  };
+
+  return <SignInContainer onSubmit={handleSubmit} />;
+};
+
 export default SignIn;
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     gap: 10,
