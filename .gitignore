@@ -5,3 +5,5 @@ dist
 .eslintrc.cjs
 vite.config.js
 rate-repository-api
+mongo_data
+redis_data
