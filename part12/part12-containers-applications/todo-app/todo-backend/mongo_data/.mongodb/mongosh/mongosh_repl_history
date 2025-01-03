@@ -1,9 +1,0 @@
-db.todos.find({})
-db.todos.insertOne( { text: 'Increase the number of tools in my tool belt', done: false } )
-db.todos.find({})
-todos.find({})
-show collections
-use the_database
-show dbs
-use admin
-show dbs
