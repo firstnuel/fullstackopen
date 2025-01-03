@@ -1,0 +1,12 @@
+docker start -i magical_snyder
+
+apt-get update
+
+apt-get -y install nano
+
+nano /usr/src/app/index.js
+
+cat usr/src/app/index.js
+console.log('Hello World') //output
+
+exit
