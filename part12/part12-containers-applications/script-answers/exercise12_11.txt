@@ -1,0 +1,23 @@
+docker compose -f docker-compose.dev.yml up
+
+docker ps 
+
+docker exec -it todo-backend-redis-1 bash
+
+redis-cli
+
+KEYS *
+1) "added_todos" //output
+
+GET added_todos
+"8" //output
+
+SET added_todos 9001
+OK //output
+
+GET added_todos
+"9001" //output
+
+FLUSHALL
+
+exit
