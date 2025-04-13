@@ -1,8 +1,13 @@
 const { DATABASE_URL } = require('./config')
 const { Umzug, SequelizeStorage } = require('umzug')
 const Sequelize = require('sequelize')
+const { Pool } = require('pg')
 
 const sequelize = new Sequelize(DATABASE_URL)
+
+const pgPool = new Pool({
+  connectionString: DATABASE_URL
+})
 
 
 const migrationConf = {
@@ -36,4 +41,4 @@ const db_conn = async () => {
     return null
   }
   
-  module.exports = { db_conn, sequelize }
+  module.exports = { db_conn, sequelize, pgPool }

@@ -8,8 +8,11 @@ const { SECRET } = require('../util/config')
 router.post('/', async (req, res) => {
 
     const user = await User.findOne({ 
-        where: { username: req.body.username }
+        where: { username: req.body.username },
+        logging: false, 
+        skipPasswordStrip: true 
     })
+
     const passwordMatch = await bcrypt.compare(req.body.password, user.password)
 
     if(!(user && passwordMatch)) {
@@ -21,13 +24,18 @@ router.post('/', async (req, res) => {
     const userForToken = {
         username: user.username, 
         id: user.id,
+        disabled: user.disabled 
     }
 
     const token = jwt.sign(userForToken, SECRET)
+    req.session.token = token
 
     res
     .status(200)
-    .send({ token, username: user.username })
+    .send({ 
+        message: "User login successful", 
+        username: user.username
+     })
 })
 
 module.exports = router

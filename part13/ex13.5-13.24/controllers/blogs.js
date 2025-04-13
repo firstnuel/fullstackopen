@@ -2,7 +2,7 @@ const router = require('express').Router()
 const { Blog } = require('../models')
 const { User } = require('../models')
 const { Op } = require("sequelize")
-const { tokenExtractor } = require('../util/middleware')
+const { tokenExtractor, isAuthenticated } = require('../util/middleware')
 
 const blogFinder = async (req, res, next) => {
     req.blog = await Blog.findByPk(req.params.id)
@@ -45,7 +45,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.post('/', tokenExtractor, async (req, res) => {
+router.post('/', tokenExtractor, isAuthenticated, async (req, res) => {
     if (!req.user) {
         return res.status(401).json({ error: 'Unauthorized: No user token provided' });
       }
@@ -60,7 +60,7 @@ router.post('/', tokenExtractor, async (req, res) => {
     })
 })
 
-router.put('/:id',tokenExtractor, blogFinder, async (req, res) => {
+router.put('/:id',tokenExtractor, isAuthenticated, blogFinder, async (req, res) => {
     if (!req.user) {
       return res.status(401).json({ error: 'Unauthorized: No user token provided' });
     }
@@ -77,7 +77,7 @@ router.put('/:id',tokenExtractor, blogFinder, async (req, res) => {
     res.json({ success: "Blog updated successfully", blog: updatedBlog })
 })
 
-router.delete('/:id', tokenExtractor, blogFinder, async (req, res) => {
+router.delete('/:id', tokenExtractor, isAuthenticated, blogFinder, async (req, res) => {
     if (!req.user) {
       return res.status(401).json({ error: 'Unauthorized: No user token provided' });
     }

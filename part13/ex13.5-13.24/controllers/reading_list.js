@@ -2,9 +2,9 @@ const router = require('express').Router()
 const { ReadingList } = require('../models')
 const { Blog } = require('../models')
 const { User } = require('../models')
-const { tokenExtractor } = require('../util/middleware')
+const { tokenExtractor, isAuthenticated } = require('../util/middleware')
 
-router.post('/', tokenExtractor, async (req, res) => {
+router.post('/', tokenExtractor, isAuthenticated, async (req, res) => {
     if (!req.user) {
         return res.status(401).json({ error: 'Unauthorized: No user token provided' });
     }
@@ -29,7 +29,7 @@ router.post('/', tokenExtractor, async (req, res) => {
     })
 })
 
-router.put('/:id', tokenExtractor, async (req, res) => {
+router.put('/:id', tokenExtractor, isAuthenticated, async (req, res) => {
     if (!req.user) {
         return res.status(401).json({ error: 'Unauthorized: No user token provided' });
     }

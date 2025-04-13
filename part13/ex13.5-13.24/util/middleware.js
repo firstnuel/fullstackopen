@@ -1,5 +1,9 @@
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('../util/config')
+const { pgPool } = require('../util/db')
+const session = require('express-session')
+const pgSession = require('connect-pg-simple')(session)
+
 
 const errorHandler = (err, req, res, next) => {
     console.error(err.message)
@@ -7,23 +11,47 @@ const errorHandler = (err, req, res, next) => {
 }
 
 const tokenExtractor = (req, res, next) => {
-    const authorization = req.get('authorization')
 
-    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-        const token = authorization.substring(7)
+    if (req.session.token) {
+        const token = req.session.token
         try {
-            decodedToken = jwt.verify(token, SECRET)
+            const decodedToken = jwt.verify(token, SECRET)
             req.user = decodedToken
         } catch{
             return res.status(401).json({ error: 'token invalid' })
           }
     } else {
-        return res.status(401).json({ error: 'token missing' })
+        return res.status(401).json({ error: 'No active session or token missing' })
     }
     next()
 }
 
+const isAuthenticated =  (req, res, next) => {
+    if (!req.user) {
+        return res.status(401).json({ error: 'No user found' })
+    }
+    if (req.user.disabled) {
+        return res.status(401).json({ error: 'No user found' })
+    }
+    next()
+}
+
+const sessionHandler = () => (
+    session({
+        store: new pgSession({
+          pool: pgPool, 
+          tableName: 'user_sessions', 
+        }),
+        secret: SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
+      })
+)
+
 module.exports = {
     errorHandler,
-    tokenExtractor
+    tokenExtractor,
+    sessionHandler,
+    isAuthenticated
 }

@@ -24,6 +24,10 @@ User.init({
     password: {
         type: DataTypes.TEXT,
         allowNull: false
+    },
+    disabled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     }
 }, {
     sequelize,
@@ -42,7 +46,7 @@ User.beforeCreate(async (user, options) => {
 })
 
 User.afterFind(async (result, options) => {
-    if (!result) return
+    if (!result || options.skipPasswordStrip) return
 
     const stripPassword = (user) => {
         if (user?.dataValues) {

@@ -2,13 +2,12 @@ const { DataTypes } = require('sequelize')
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
-    await queryInterface.addColumn('users', 'name', {
+    await queryInterface.addColumn('users', 'disabled', {
       type: DataTypes.TEXT,
+      defaultValue: false
     })
   },
   down: async ({ context: queryInterface }) => {
-    await queryInterface.removeColumn('users', 'name')
+    await queryInterface.removeColumn('users', 'disabled')
   },
 }
-
-
