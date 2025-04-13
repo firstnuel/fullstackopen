@@ -39,9 +39,6 @@ module.exports = {
         type: DataTypes.TEXT,
         unique: true,
         allowNull: false,
-        validate: {
-            isEmail: true
-        }
       },
     })
     await queryInterface.addColumn('blogs', 'user_id', {

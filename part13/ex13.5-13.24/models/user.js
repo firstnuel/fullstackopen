@@ -17,6 +17,10 @@ User.init({
             isEmail: true
         }
     },
+    name: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
     password: {
         type: DataTypes.TEXT,
         allowNull: false
@@ -35,4 +39,20 @@ User.beforeCreate(async (user, options) => {
     const hashedPassword = await bcrypt.hash(user.password, salt)
     user.password = hashedPassword
 
+})
+
+User.afterFind(async (result, options) => {
+    if (!result) return
+
+    const stripPassword = (user) => {
+        if (user?.dataValues) {
+            delete user.dataValues.password
+        }
+    };
+
+    if (Array.isArray(result)) {
+        result.forEach(stripPassword);
+    } else {
+        stripPassword(result);
+    }
 })

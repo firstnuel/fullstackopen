@@ -32,13 +32,13 @@ router.get('/', async (req, res) => {
       ],
   })
   if (blogs.length) {
-    res.json({
+      res.json({
         status: "Success",
         message: "Blogs fetched successfully",
         data: blogs
     })
   } else {
-    res.json({
+      res.json({
         message: "No blog found",
         data: blogs
     })
@@ -60,10 +60,17 @@ router.post('/', tokenExtractor, async (req, res) => {
     })
 })
 
-router.put('/:id', blogFinder, async (req, res) => {
+router.put('/:id',tokenExtractor, blogFinder, async (req, res) => {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Unauthorized: No user token provided' });
+    }
 
     if (!req.blog) {
         return res.status(404).json({ error: 'Blog not found' });
+    }
+
+    if (req.user.id !== req.blog.userId) {
+      return res.status(403).json({ error: 'Forbidden: You are not the blog owner' });
     }
 
     const updatedBlog = await req.blog.update({ ...req.body })
