@@ -31,7 +31,18 @@ router.get('/', async (req, res) => {
         ['likes', 'DESC']
       ],
   })
-  res.json(blogs)
+  if (blogs.length) {
+    res.json({
+        status: "Success",
+        message: "Blogs fetched successfully",
+        data: blogs
+    })
+  } else {
+    res.json({
+        message: "No blog found",
+        data: blogs
+    })
+  }
 })
 
 router.post('/', tokenExtractor, async (req, res) => {
